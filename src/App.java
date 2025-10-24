@@ -2,6 +2,9 @@ import processing.core.*;
 
 public class App extends PApplet {
     int scene = 1;
+    int millis = 0;
+    
+
 
     
 
@@ -12,29 +15,29 @@ public class App extends PApplet {
 
     public void setup() {
         background(238, 199, 54);
+        if (scene >= 2){
         fill(255);
         noStroke();
         rectMode(CENTER);
         rect(width / 2, height / 2, 800, 600);
         stroke(0);
+        }
     }
 
     public void settings() {
         size(1000, 800);
-
+       
     }
 
     public void mouseDragged() {
-        int startTime=0;
-        startTime = frameCount;
-        if (scene == 2 && frameCount>=20) {
+       
+        if (scene == 2) {
+          
 
             line(pmouseX, pmouseY, mouseX, mouseY);
         }
-        else{
-             textSize(60);
-            textAlign(CENTER, CENTER);
-            text("What is it?", 450, 50);
+        else if(scene == 3){
+            
         }
 
     }
@@ -47,8 +50,12 @@ public class App extends PApplet {
             text("draw in under 20 seconds", 450, 50);
             text("PRESS UP KEY TO START", 450, 750);
         } else if (scene == 2) {
+           
+        line(pmouseX, pmouseY, mouseX, mouseY);
+
             
-            println(frameCount);
+              println(20-millis());
+          
            
 
 
@@ -56,6 +63,15 @@ public class App extends PApplet {
             textSize(60);
             textAlign(CENTER, CENTER);
 
+        }
+        else if (scene ==3){
+            noStroke();
+             textSize(60);
+            textAlign(CENTER, CENTER);
+            text("What is it?", 450, 50);
+            rectMode(CENTER);
+        rect(width / 2, height / 2, 800, 600);
+        stroke(0);
         }
        
 
