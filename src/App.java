@@ -1,12 +1,20 @@
+
 import processing.core.*;
 
 public class App extends PApplet {
     int scene = 1;
-    int millis = 0;
-    
+    final int X1 = 100, Y1 = 100, X2 = 900, Y2 = 700;
+    int startTime = 0;
+    int timeLeft = 20000;
+    String[] prompts = {
+            "cat", "pillow", "tree", "house"
+    };
+    String prompt = "";
 
-
-    
+    String guess = "";
+    int triesLeft = 3;
+    String correct = "";
+    boolean roundOver = false;
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -15,29 +23,26 @@ public class App extends PApplet {
 
     public void setup() {
         background(238, 199, 54);
-        if (scene >= 2){
-        fill(255);
-        noStroke();
-        rectMode(CENTER);
-        rect(width / 2, height / 2, 800, 600);
-        stroke(0);
-        }
+        textAlign(CENTER, CENTER);
+        textSize(60);
+        prompt = prompts[(int) random(prompts.length)];
     }
 
     public void settings() {
         size(1000, 800);
-       
+
     }
 
     public void mouseDragged() {
-       
-        if (scene == 2) {
-          
 
+        if (scene == 2 && mouseX > X1 && mouseX < X2 && mouseY > Y1 && mouseY < Y2 && pmouseX > X1 && pmouseX < X2
+                && pmouseY > Y1 && pmouseY < Y2) {
+
+            stroke(0);
+            strokeWeight(5);
             line(pmouseX, pmouseY, mouseX, mouseY);
-        }
-        else if(scene == 3){
-            
+        } else if (scene == 3) {
+
         }
 
     }
@@ -46,42 +51,79 @@ public class App extends PApplet {
 
         if (scene == 1) {
             textSize(60);
+            background(238, 199, 54);
             textAlign(CENTER, CENTER);
-            text("draw in under 20 seconds", 450, 50);
-            text("PRESS UP KEY TO START", 450, 750);
+            text("draw" + prompt + "in under 20 seconds", width / 2f, 50);
+            text("PRESS UP KEY TO START", width / 2f, 750);
+            drawBoard();
         } else if (scene == 2) {
-           
-        line(pmouseX, pmouseY, mouseX, mouseY);
 
-            
-              println(20-millis());
-          
-           
-
-
-            strokeWeight(5);
-            textSize(60);
-            textAlign(CENTER, CENTER);
-
-        }
-        else if (scene ==3){
             noStroke();
-             textSize(60);
+            fill(238, 199, 54);
+            rectMode(CORNER);
+            rect(0, 0, width, 140);
+            drawBoard();
+            int left = max(0, timeLeft - (millis() - startTime));
+            int secs = (int) ceil(left / 1000.0);
+            fill(0);
+            textSize(40);
             textAlign(CENTER, CENTER);
-            text("What is it?", 450, 50);
-            rectMode(CENTER);
-        rect(width / 2, height / 2, 800, 600);
-        stroke(0);
-        }
-       
+            text("Draw: " + prompt, width / 2f, 50);
+            text("Time left: " + secs, width / 2f, 100);
 
-        
+        }
+        if (left <= 0) {
+            startGuessScene();
+        } else if (scene == 3) {
+            noStroke();
+            fill(238, 199, 54);
+            rect(0, 0, width, 220);
+            rect(0, Y2 + 10, width, 160);
+            drawBoard();
+            fill(0);
+            textSize(60);
+            text("What is it?", width / 2f, 70);
+
+            textSize(28);
+            text("Type your guess and press Enter", width / 2f, 120);
+            text("Tries left: " + triesLeft, width / 2f, 155);
+            int boxW = 600, boxH = 52;
+            int boxX = width / 2 - boxW / 2, boxY = 180;
+
+            stroke(0);
+            strokeWeight(2);
+            fill(255);
+            rect(boxX, boxY, boxW, boxH, 8);
+            fill(0);
+            textAlign(LEFT, CENTER);
+            textSize(24);
+            String shown = guess;
+            if (!roundOver && ((millis() / 500) % 2 == 0))
+                shown += "|";
+            text(shown, boxX + 12, boxY + boxH / 2f);
+            textAlign(CENTER, CENTER);
+            text(correct, width / 2f, boxY + boxH + 30);
+
+            if (roundOver) {
+                text("Press ↑ to start a new round", width / 2f, boxY + boxH + 65);
+            }
+        }
+
     }
 
     public void keyPressed() {
         if (keyCode == UP) {
-            scene++;
+          startRound();
+        } else if (scene == 3 && roundOver){
+            startRound();
+        } else if (scene ==2 ){
+        
+        }
+    }if(scene==3&&!roundOver){
+        if (key == BACKSPACE){
+
         }
     }
 
 }
+
