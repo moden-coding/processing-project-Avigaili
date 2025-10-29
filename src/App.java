@@ -7,19 +7,22 @@ public class App extends PApplet {
     int startTime = 0;
     int timeLeft = 20000;
     String[] prompts = {
-            "cat", "pillow", "tree", "house"
+            "cat", "pillow", "tree", "house", "dog", "car"
     };
     String prompt = "";
+
 
     String guess = "";
     int triesLeft = 3;
     String correct = "";
     boolean roundOver = false;
 
+
     public static void main(String[] args) {
         PApplet.main("App");
 
     }
+
 
     public void setup() {
         background(238, 199, 54);
@@ -53,7 +56,7 @@ public class App extends PApplet {
             textSize(60);
             background(238, 199, 54);
             textAlign(CENTER, CENTER);
-            text("draw" + prompt + "in under 20 seconds", width / 2f, 50);
+            text("draw " + prompt + " in under 20 seconds", width / 2f, 50);
             text("PRESS UP KEY TO START", width / 2f, 750);
             drawBoard();
         } else if (scene == 2) {
@@ -64,7 +67,7 @@ public class App extends PApplet {
             rect(0, 0, width, 140);
             drawBoard();
             int left = max(0, timeLeft - (millis() - startTime));
-            int secs = (int) ceil(left / 1000.0);
+            int secs = (int)(left / 1000.0);
             fill(0);
             textSize(40);
             textAlign(CENTER, CENTER);
@@ -72,7 +75,7 @@ public class App extends PApplet {
             text("Time left: " + secs, width / 2f, 100);
 
         }
-        if (left <= 0) {
+        if (triesLeft <= 0) {
             startGuessScene();
         } else if (scene == 3) {
             noStroke();
@@ -117,13 +120,70 @@ public class App extends PApplet {
         } else if (scene == 3 && roundOver){
             startRound();
         } else if (scene ==2 ){
+            
         
         }
-    }if(scene==3&&!roundOver){
-        if (key == BACKSPACE){
-
-        }
+    
+    if(scene==3&&!roundOver) {
+        if (key == BACKSPACE) {
+            if (guess.length() > 0)
+    
+        } else if (key == ENTER || key == RETURN) {
+            guess();
+           
+        } 
     }
-
 }
 
+void drawBoard() {
+       
+        rectMode(CORNER);
+        noStroke();
+        fill(255);
+        rect(X1, Y1, X2 - X1, Y2 - Y1);
+        noFill();
+        stroke(0);
+        strokeWeight(2);
+        rect(X1, Y1, X2 - X1, Y2 - Y1);
+    }
+
+    void startRound() {
+       
+        background(238, 199, 54);
+        drawBoard();
+
+ 
+        prompt = prompts[(int) random(prompts.length)];
+        startTime = millis();
+
+       
+        scene = 2;
+    }
+
+    void startGuessScene() {
+        scene = 3;
+        guess = "";
+        triesLeft = 3;
+        correct = "";
+        roundOver = false;
+    }
+
+    void submitGuess() {
+        String g = guess();
+        String p = prompt();
+
+        if (g.equals(p)) {
+            correct = "Correct! It was \"" + prompt + "\".";
+            roundOver = true;
+        } else {
+            triesLeft--;
+            if (triesLeft > 0) {
+                correct = "Try again.";
+                guess = "";
+            } else {
+                correct = "Out of tries. It was \"" + prompt + "\".";
+                roundOver = true;
+            }
+        }
+    }
+}
