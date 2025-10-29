@@ -9,6 +9,7 @@ public class App extends PApplet {
     String[] prompts = {
             "cat", "pillow", "tree", "house", "dog", "car"
     };
+    // ^ From chatGPT so it could just be a bunch of prompts to randomly generate from (lines 9-11) ^
     String prompt = "";
 
 
@@ -28,11 +29,17 @@ public class App extends PApplet {
         background(238, 199, 54);
         textAlign(CENTER, CENTER);
         textSize(60);
-        prompt = prompts[(int) random(prompts.length)];
+       
+          
+       
+        // This part is from chatGPT because I needed to learn how to give an output of a random prompt for the player! (The line below)
+        prompt = prompts[(int) random(prompts.length)]; 
+
     }
 
     public void settings() {
         size(1000, 800);
+       
 
     }
 
@@ -44,13 +51,18 @@ public class App extends PApplet {
             stroke(0);
             strokeWeight(5);
             line(pmouseX, pmouseY, mouseX, mouseY);
+            //This was to get it to draw only in the rectangle and when the scene is the second one 
         } else if (scene == 3) {
 
         }
 
     }
+    
+
+    
 
     public void draw() {
+       
 
         if (scene == 1) {
             textSize(60);
@@ -58,31 +70,34 @@ public class App extends PApplet {
             textAlign(CENTER, CENTER);
             text("draw " + prompt + " in under 20 seconds", width / 2f, 50);
             text("PRESS UP KEY TO START", width / 2f, 750);
-            drawBoard();
+             drawBoard();
+            
+            //What should happen in scene 1 ^
         } else if (scene == 2) {
 
             noStroke();
             fill(238, 199, 54);
             rectMode(CORNER);
             rect(0, 0, width, 140);
-            drawBoard();
+           
             int left = max(0, timeLeft - (millis() - startTime));
             int secs = (int)(left / 1000.0);
-            fill(0);
+            fill(255);
             textSize(40);
             textAlign(CENTER, CENTER);
             text("Draw: " + prompt, width / 2f, 50);
             text("Time left: " + secs, width / 2f, 100);
-
+ //What should happen in scene 2 ^
         }
-        if (triesLeft <= 0) {
+        if (timeLeft <= 0) {
+            scene++;
             startGuessScene();
         } else if (scene == 3) {
             noStroke();
             fill(238, 199, 54);
             rect(0, 0, width, 220);
-            rect(0, Y2 + 10, width, 160);
-            drawBoard();
+            rect(0, Y2 , width, 160);
+           
             fill(0);
             textSize(60);
             text("What is it?", width / 2f, 70);
@@ -108,7 +123,7 @@ public class App extends PApplet {
             text(correct, width / 2f, boxY + boxH + 30);
 
             if (roundOver) {
-                text("Press ↑ to start a new round", width / 2f, boxY + boxH + 65);
+                text("Press up to start a new round", width / 2f, boxY + boxH + 65);
             }
         }
 
@@ -116,41 +131,31 @@ public class App extends PApplet {
 
     public void keyPressed() {
         if (keyCode == UP) {
-          startRound();
+           
+         scene++;
         } else if (scene == 3 && roundOver){
-            startRound();
+            scene++;
         } else if (scene ==2 ){
             
         
         }
-    
-    if(scene==3&&!roundOver) {
-        if (key == BACKSPACE) {
-            if (guess.length() > 0)
-    
-        } else if (key == ENTER || key == RETURN) {
-            guess();
-           
-        } 
-    }
+   
 }
 
-void drawBoard() {
+public void drawBoard() {
        
         rectMode(CORNER);
         noStroke();
         fill(255);
         rect(X1, Y1, X2 - X1, Y2 - Y1);
         noFill();
-        stroke(0);
-        strokeWeight(2);
+      noStroke();
         rect(X1, Y1, X2 - X1, Y2 - Y1);
     }
 
     void startRound() {
        
-        background(238, 199, 54);
-        drawBoard();
+        
 
  
         prompt = prompts[(int) random(prompts.length)];
@@ -160,17 +165,19 @@ void drawBoard() {
         scene = 2;
     }
 
+    
+
     void startGuessScene() {
         scene = 3;
-        guess = "";
+        guess = " ";
         triesLeft = 3;
-        correct = "";
+        correct = " ";
         roundOver = false;
     }
 
     void submitGuess() {
-        String g = guess();
-        String p = prompt();
+        String g = guess;
+        String p = prompt;
 
         if (g.equals(p)) {
             correct = "Correct! It was \"" + prompt + "\".";
@@ -180,10 +187,12 @@ void drawBoard() {
             if (triesLeft > 0) {
                 correct = "Try again.";
                 guess = "";
-            } else {
+            } else if (triesLeft <= 3) {
                 correct = "Out of tries. It was \"" + prompt + "\".";
                 roundOver = true;
             }
         }
+        //Checking the guess with the prompt to see if they equal eachother to see if then they can go to the correct screen or if they need to guess again 
+        //but if the person guesses three times and doesnt get it right then they get to know the answer and the game moves on
     }
 }
