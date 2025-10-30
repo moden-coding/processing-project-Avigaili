@@ -65,11 +65,11 @@ public class App extends PApplet {
        
 
         if (scene == 1) {
-            textSize(60);
+            textSize(40);
             background(238, 199, 54);
             textAlign(CENTER, CENTER);
-            text("draw " + prompt + " in under 20 seconds", width / 2f, 50);
-            text("PRESS UP KEY TO START", width / 2f, 750);
+            text("draw " + prompt + " in under 20 seconds and press UP to start", width / 2f, 50);
+            // text("PRESS UP KEY TO START", width / 2f, 750);
              drawBoard();
             
             //What should happen in scene 1 ^
@@ -139,6 +139,9 @@ public class App extends PApplet {
             
         
         }
+        if (scene ==3 &&  key == ENTER || key == RETURN){
+           if  (!roundOver) submitGuess(); }
+        
    
 }
 
@@ -159,6 +162,7 @@ public void drawBoard() {
 
  
         prompt = prompts[(int) random(prompts.length)];
+        //ChatGPT ^
         startTime = millis();
 
        
@@ -180,6 +184,7 @@ public void drawBoard() {
         String p = prompt;
 
         if (g.equals(p)) {
+
             correct = "Correct! It was \"" + prompt + "\".";
             roundOver = true;
         } else {
