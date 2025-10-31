@@ -13,7 +13,7 @@ public class App extends PApplet {
     String prompt = "";
 
 
-    String guess = "";
+    String guess = "  ";
     int triesLeft = 3;
     String correct = "";
     boolean roundOver = false;
@@ -101,9 +101,11 @@ public class App extends PApplet {
             fill(0);
             textSize(60);
             text("What is it?", width / 2f, 70);
+            
 
             textSize(28);
             text("Type your guess and press Enter", width / 2f, 120);
+          
             text("Tries left: " + triesLeft, width / 2f, 155);
             int boxW = 600, boxH = 52;
             int boxX = width / 2 - boxW / 2, boxY = 180;
@@ -115,10 +117,12 @@ public class App extends PApplet {
             fill(0);
             textAlign(LEFT, CENTER);
             textSize(24);
-            String shown = guess;
+            //String shown = guess;
             if (!roundOver && ((millis() / 500) % 2 == 0))
-                shown += "|";
-            text(shown, boxX + 12, boxY + boxH / 2f);
+            
+                //shown += "|"; 
+                
+            text(guess, boxX + 12, boxY + boxH / 2f);
             textAlign(CENTER, CENTER);
             text(correct, width / 2f, boxY + boxH + 30);
 
@@ -130,6 +134,8 @@ public class App extends PApplet {
     }
 
     public void keyPressed() {
+      
+        
         if (keyCode == UP) {
            
          scene++;
@@ -139,8 +145,14 @@ public class App extends PApplet {
             
         
         }
+        if (scene ==3 ){
+              guess+=key;
+        }
+        
         if (scene ==3 &&  key == ENTER || key == RETURN){
            if  (!roundOver) submitGuess(); }
+
+           
         
    
 }
@@ -182,6 +194,7 @@ public void drawBoard() {
     void submitGuess() {
         String g = guess;
         String p = prompt;
+      
 
         if (g.equals(p)) {
 
